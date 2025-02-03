@@ -1,0 +1,37 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /api
+spring:
+  application:
+    name: picture-backend
+  # 数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/yu-picture
+    username: root
+    password: root
+mybatis-plus:
+  configuration:
+    # - 转 驼峰
+    map-underscore-to-camel-case: false
+    # 打印日志 仅在开发阶段
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      # 逻辑删除
+      logic-delete-field: isDelete # 全局逻辑删除的实体字段名
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+# 接口文档
+knife4j:
+  enable: true
+  openapi:
+    title: 智能云图库接口文档
+    version: 1.0
+    group:
+      default:
+        group-name: default
+        api-rule: package
+        api-rule-resources:
+          - com.zcw.picture.controller
