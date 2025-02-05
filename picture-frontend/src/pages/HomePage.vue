@@ -1,12 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
 
-<template>
-  主页<br />
-  主页<br />主页<br />
-  主页<br />
-  主页<br />主页<br />
+</script>
 
-  主页
+<template>主页
+
 </template>
 
 <style scoped></style>
