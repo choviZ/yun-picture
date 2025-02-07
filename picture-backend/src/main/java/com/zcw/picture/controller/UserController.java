@@ -8,7 +8,7 @@ import com.zcw.picture.common.DeleteRequest;
 import com.zcw.picture.common.Response;
 import com.zcw.picture.common.ResultUtils;
 import com.zcw.picture.constant.UserConstant;
-import com.zcw.picture.domain.User;
+import com.zcw.picture.domain.entity.User;
 import com.zcw.picture.domain.dto.user.*;
 import com.zcw.picture.domain.vo.LoginUserVo;
 import com.zcw.picture.exception.ErrorCode;
@@ -89,7 +89,6 @@ public class UserController {
     @PostMapping("/delete")
     @AuthCheck(role = UserConstant.ADMIN)
     public Response<Boolean> userDelete(@RequestBody DeleteRequest deleteRequest) {
-        // TODO 挖坑：没有实现逻辑删除
         boolean result = userService.removeById(deleteRequest.getId());
         return ResultUtils.success(result);
     }

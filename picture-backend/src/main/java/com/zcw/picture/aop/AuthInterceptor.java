@@ -1,7 +1,7 @@
 package com.zcw.picture.aop;
 
 import com.zcw.picture.annotation.AuthCheck;
-import com.zcw.picture.domain.User;
+import com.zcw.picture.domain.entity.User;
 import com.zcw.picture.enums.UserRoleEnum;
 import com.zcw.picture.exception.BusinessException;
 import com.zcw.picture.exception.ErrorCode;

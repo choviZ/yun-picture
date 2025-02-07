@@ -1,12 +1,10 @@
-package com.zcw.picture.domain;
+package com.zcw.picture.domain.entity;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import com.zcw.picture.domain.vo.LoginUserVo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -77,10 +75,10 @@ public class User implements Serializable {
     /**
      * 是否删除
      */
-    @TableField(exist = false)
     @TableLogic
     private Integer isDelete;
 
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
 }
