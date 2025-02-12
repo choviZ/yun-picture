@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.http.HttpUtil;
 import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.model.ciModel.persistence.ImageInfo;
 import com.zcw.picture.config.CosClientConfig;
@@ -27,6 +28,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@Deprecated
 public class PictureManager {
 
     @Resource

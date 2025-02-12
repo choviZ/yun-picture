@@ -1,5 +1,6 @@
 package com.zcw.picture.manager;
 
+import cn.hutool.core.io.FileUtil;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.model.*;
 import com.qcloud.cos.model.ciModel.persistence.PicOperations;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * COS的基础功能
@@ -33,17 +35,43 @@ public class CosManager {
         // 返回原图信息
         PicOperations picOperations = new PicOperations();
         picOperations.setIsPicInfo(1);
+        ArrayList<PicOperations.Rule> rules = new ArrayList<>();
+        // 图片压缩（转换为webp格式）
+        String webpKey = FileUtil.mainName(key) + ".webp"; // logo.png -> logo.webp
+        PicOperations.Rule rule = new PicOperations.Rule();
+        rule.setFileId(webpKey);
+        rule.setRule("imageMogr2/format/webp");
+        rule.setBucket(cosClientConfig.getBucket());
+        rules.add(rule);
+        // 处理缩略图，仅对大于20kb的图片生成
+        if (file.length() > 2 * 1024) {
+            PicOperations.Rule rule2 = new PicOperations.Rule();
+            rule2.setBucket(cosClientConfig.getBucket());
+            rule2.setFileId(FileUtil.mainName(key) + "_thumbnail." + FileUtil.getSuffix(key));
+            rule2.setRule(String.format("imageMogr2/thumbnail/%sx%s>", 256, 256));
+            rules.add(rule2);
+        }
+        // 构造处理参数
+        picOperations.setRules(rules);
         putObjectRequest.setPicOperations(picOperations);
         return cosClient.putObject(putObjectRequest);
     }
 
     /**
      * 下载文件
+     *
      * @param key 对象键，详细看 ->上传文件的注释
      * @return 对象的内容及其元数据信息
      */
     public COSObject downloadFile(String key) {
         GetObjectRequest getObjectRequest = new GetObjectRequest(cosClientConfig.getBucket(), key);
         return cosClient.getObject(getObjectRequest);
+    }
+
+    /**
+     * 删除对象
+     */
+    public void deleteFile(String key) {
+        cosClient.deleteObject(cosClientConfig.getBucket(),key);
     }
 }
