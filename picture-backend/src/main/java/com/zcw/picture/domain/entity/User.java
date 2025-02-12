@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 用户
+ * 用户实体类
  *
  * @TableName user
  */

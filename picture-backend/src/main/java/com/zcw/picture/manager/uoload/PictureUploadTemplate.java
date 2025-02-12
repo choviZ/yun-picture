@@ -5,7 +5,6 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.http.HttpUtil;
 import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.model.ciModel.persistence.CIObject;
 import com.qcloud.cos.model.ciModel.persistence.ImageInfo;
@@ -69,7 +68,7 @@ public abstract class PictureUploadTemplate {
                     thumbnailCiObject = objectList.get(1);
                 }
                 // 封装压缩图返回结果
-                return buildResult(uploadFileName, compressedCiObject,thumbnailCiObject);
+                return buildResult(uploadPath, compressedCiObject,thumbnailCiObject);
             }
             // 封装原图返回结果
             return buildResult(uploadPath, uploadFileName, tempFile, imageInfo);
@@ -83,6 +82,10 @@ public abstract class PictureUploadTemplate {
 
     /**
      * 构建返回结果
+     * @param uploadPath 上传路径 -cos中的key
+     * @param uploadFileName 文件名
+     * @param tempFile 上传过程中创建的临时文件，该方法中用于获取文件大小
+     * @param imageInfo cos服务返回的图片信息
      */
     private UploadPictureResult buildResult(String uploadPath, String uploadFileName, File tempFile, ImageInfo imageInfo) {
         return UploadPictureResult.builder()
@@ -95,14 +98,19 @@ public abstract class PictureUploadTemplate {
                 .picFormat(imageInfo.getFormat())
                 .build();
     }
-
-    private UploadPictureResult buildResult(String uploadFileName,CIObject compressedCiObject,CIObject thumbnailCiObject) {
+    /**
+     * 构建返回结果
+     * @param uploadPath 上传路径 -cos中的key
+     * @param compressedCiObject 压缩图对象
+     * @param thumbnailCiObject 缩略图对象
+     */
+    private UploadPictureResult buildResult(String uploadPath,CIObject compressedCiObject,CIObject thumbnailCiObject) {
         Integer height = compressedCiObject.getHeight();
         Integer width = compressedCiObject.getWidth();
         String format = compressedCiObject.getFormat();
         double picScale = NumberUtil.round((width * 1.0 / height), 2).doubleValue();
         return UploadPictureResult.builder()
-                .picName(FileUtil.mainName(uploadFileName))
+                .picName(FileUtil.mainName(uploadPath))
                 .picSize(compressedCiObject.getSize().longValue())
                 .picHeight(height)
                 .picWidth(width)
@@ -110,6 +118,8 @@ public abstract class PictureUploadTemplate {
                 .picFormat(format)
                 // 设置压缩后的地址
                 .url(cosClientConfig.getHost() + "/" + compressedCiObject.getKey())
+                // 设置原图地址
+                .originUrl(cosClientConfig.getHost() + "/" + uploadPath)
                 // 设置缩略图地址
                 .thumbnailUrl(cosClientConfig.getHost() + "/" +thumbnailCiObject.getKey())
                 .build();

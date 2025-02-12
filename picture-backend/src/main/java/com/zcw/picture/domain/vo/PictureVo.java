@@ -1,7 +1,6 @@
 package com.zcw.picture.domain.vo;
 
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.annotation.*;
 import com.zcw.picture.domain.entity.Picture;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
@@ -28,6 +27,11 @@ public class PictureVo implements Serializable {
      * 缩略图url
      */
     private String thumbnailUrl;
+
+    /**
+     * 原图 url
+     */
+    private String originUrl;
 
     /**
      * 图片名称
