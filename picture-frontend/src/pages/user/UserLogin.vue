@@ -55,7 +55,6 @@ const loginUserForm = reactive<API.UserLoginRequest>({
 const handlerSubmit = async (userLoginRequest: API.UserLoginRequest) => {
   const res: AxiosResponse<API.ResponseLoginUserVo_> = await userLoginUsingPost(userLoginRequest)
   if (res.data.code === 0 && res.data.data) {
-    console.log('请求：', res.data)
     // 更新状态
     await loginUserStore.fetchLoginUser()
     message.success('登录成功')
